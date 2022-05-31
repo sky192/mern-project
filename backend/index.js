@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const { Todo } = require("./models/todo");
+console.log(Todo);
 
 require("dotenv").config();
 
