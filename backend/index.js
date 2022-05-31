@@ -1,10 +1,16 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const { Todo } = require("./models/todo");
-console.log(Todo);
+const todos = require("./routes/todos");
+const cors = require("cors");
 
 require("dotenv").config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/todos", todos);
 
 app.get("/", (req, res) => {
     res.send("wellcome to our todos api");
