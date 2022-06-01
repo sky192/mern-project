@@ -26,7 +26,9 @@ app.listen(port, () => {
 mongoose
     .connect(connection_srting, {
         useNewUrlParser: true,
+        // useCreateIndex: true,
         useUnifiedTopology: true,
+        // useFindAndModify: false,
     })
     .then(() => console.log("MongoDB connection established..."))
     .catch((error) =>
