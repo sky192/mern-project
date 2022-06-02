@@ -1,20 +1,18 @@
 //Joi
-//does user exits?
-//create new user
-//Hash password => bcrypt
-//save user
+//does the user exist
+//validate password
+//jwt => send to client
 
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const express = require("express");
 const { User } = require("../models/user");
-const bcrypt = require("bcrypt");
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
     const schema = Joi.object({
-        name: Joi.string().min(3).max(30).required(),
         email: Joi.string().min(3).max(200).required().email(),
         password: Joi.string().min(6).max(200).required(),
     });
@@ -24,22 +22,14 @@ router.post("/", async (req, res) => {
 
     try {
         let user = await User.findOne({ email: req.body.email });
-        if (user)
-            return res
-                .status(400)
-                .send("User with that email already exist...");
+        if (!user) return res.status(400).send("Invalid email or password...");
 
-        const { name, email, password } = req.body;
-
-        user = new User({
-            name,
-            email,
-            password,
-        });
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-        await user.save();
+        const validpassword = await bcrypt.compare(
+            req.body.password,
+            user.password
+        );
+        if (!validpassword)
+            return res.status(400).send("Invalid email or password...");
 
         const secretkey = process.env.SECRET_KEY;
         const token = jwt.sign(
