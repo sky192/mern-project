@@ -1,9 +1,12 @@
 import React from "react";
+import AddTodo from "./AddTodo";
+import ListTodo from "./ListTodo";
 
 const Todos = () => {
     return (
         <div>
-            <h2>Todos</h2>
+            <AddTodo />
+            <ListTodo />
         </div>
     );
 };
